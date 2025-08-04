@@ -1,0 +1,43 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient circles -->
+  <circle cx="256" cy="256" r="256" fill="url(#gradient1)" transform="rotate(12 256 256)"/>
+  <circle cx="256" cy="256" r="240" fill="url(#gradient2)" transform="rotate(-6 256 256)" opacity="0.8"/>
+  <circle cx="256" cy="256" r="220" fill="url(#gradient3)"/>
+  
+  <!-- Central C letter -->
+  <text x="256" y="320" font-family="Arial Black, sans-serif" font-size="200" font-weight="900" text-anchor="middle" fill="white">
+    C
+  </text>
+  
+  <!-- Sparkle elements -->
+  <g fill="#FFD700">
+    <polygon points="180,150 185,160 195,155 190,165 200,170 190,175 195,185 185,180 180,190 175,180 165,185 170,175 160,170 170,165 165,155 175,160" opacity="0.9"/>
+    <polygon points="350,120 353,126 359,123 356,129 362,132 356,135 359,141 353,138 350,144 347,138 341,141 344,135 338,132 344,129 341,123 347,126" opacity="0.8"/>
+    <polygon points="320,350 323,356 329,353 326,359 332,362 326,365 329,371 323,368 320,374 317,368 311,371 314,365 308,362 314,359 311,353 317,356" opacity="0.9"/>
+  </g>
+  
+  <!-- Floating dots -->
+  <circle cx="150" cy="200" r="8" fill="#FF6B9D" opacity="0.7"/>
+  <circle cx="380" cy="180" r="6" fill="#4ECDC4" opacity="0.8"/>
+  <circle cx="120" cy="350" r="10" fill="#45B7D1" opacity="0.6"/>
+  <circle cx="400" cy="320" r="7" fill="#96CEB4" opacity="0.7"/>
+  
+  <!-- Gradient definitions -->
+  <defs>
+    <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#667eea"/>
+      <stop offset="50%" stop-color="#764ba2"/>
+      <stop offset="100%" stop-color="#f093fb"/>
+    </linearGradient>
+    <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffecd2"/>
+      <stop offset="50%" stop-color="#fcb69f"/>
+      <stop offset="100%" stop-color="#ff8a80"/>
+    </linearGradient>
+    <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4facfe"/>
+      <stop offset="50%" stop-color="#00f2fe"/>
+      <stop offset="100%" stop-color="#667eea"/>
+    </linearGradient>
+  </defs>
+</svg>
