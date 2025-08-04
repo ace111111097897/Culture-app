@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import EnhancedProfileSection from './EnhancedProfileSection';
 import EnhancedCubblesSection from './EnhancedCubblesSection';
-import { User, Globe, Home, Settings, LogOut } from 'lucide-react';
+import MatchesSection from './MatchesSection';
+import { User, Globe, Home, Settings, LogOut, Heart } from 'lucide-react';
 
 const CultureAppMain: React.FC = () => {
   const [activeTab, setActiveTab] = useState('home');
@@ -90,13 +91,20 @@ const CultureAppMain: React.FC = () => {
       <nav className="bg-white/60 backdrop-blur-sm border-b border-teal-100">
         <div className="max-w-7xl mx-auto px-4">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-3 bg-transparent">
+            <TabsList className="grid w-full grid-cols-4 bg-transparent">
               <TabsTrigger 
                 value="home" 
                 className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-teal-500 data-[state=active]:to-blue-500 data-[state=active]:text-white"
               >
                 <Home className="w-4 h-4 mr-2" />
                 Home
+              </TabsTrigger>
+              <TabsTrigger 
+                value="matches"
+                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-teal-500 data-[state=active]:to-blue-500 data-[state=active]:text-white"
+              >
+                <Heart className="w-4 h-4 mr-2" />
+                Matches
               </TabsTrigger>
               <TabsTrigger 
                 value="cubbles"
@@ -131,7 +139,17 @@ const CultureAppMain: React.FC = () => {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <Card className="hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer" onClick={() => setActiveTab('matches')}>
+                  <CardContent className="p-6 text-center">
+                    <div className="w-16 h-16 bg-gradient-to-r from-pink-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Heart className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2">Find Matches</h3>
+                    <p className="text-gray-600 text-sm">Discover people who share your cultural interests</p>
+                  </CardContent>
+                </Card>
+
                 <Card className="hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer" onClick={() => setActiveTab('cubbles')}>
                   <CardContent className="p-6 text-center">
                     <div className="w-16 h-16 bg-gradient-to-r from-teal-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -166,7 +184,13 @@ const CultureAppMain: React.FC = () => {
               {/* Quick Stats */}
               <div className="mt-8">
                 <h3 className="text-xl font-semibold text-gray-800 mb-4">Your Activity</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <Card>
+                    <CardContent className="p-4 text-center">
+                      <div className="text-2xl font-bold text-pink-600">0</div>
+                      <div className="text-sm text-gray-600">Matches</div>
+                    </CardContent>
+                  </Card>
                   <Card>
                     <CardContent className="p-4 text-center">
                       <div className="text-2xl font-bold text-teal-600">0</div>
@@ -188,6 +212,10 @@ const CultureAppMain: React.FC = () => {
                 </div>
               </div>
             </div>
+          </TabsContent>
+
+          <TabsContent value="matches" className="mt-0">
+            <MatchesSection />
           </TabsContent>
 
           <TabsContent value="cubbles" className="mt-0">
