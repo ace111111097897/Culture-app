@@ -4,17 +4,36 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import CubbleStoryViewer from './CubbleStoryViewer';
+import CubbleStoryCreator from './CubbleStoryCreator';
 import { 
   Plus, Search, Clock, Users, Globe, 
   Play, Camera, Video, Heart, MessageCircle 
 } from 'lucide-react';
 
+interface CubbleStory {
+  id: string;
+  userId: string;
+  username: string;
+  avatar: string;
+  content: {
+    type: 'image' | 'video';
+    url: string;
+    thumbnail?: string;
+  };
+  caption: string;
+  timestamp: Date;
+  expiresAt: Date;
+  likes: number;
+  comments: number;
+  culturalTags: string[];
+  preview: string;
+}
+
 const EnhancedCubblesSection: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStoryIndex, setSelectedStoryIndex] = useState<number | null>(null);
   const [showStoryViewer, setShowStoryViewer] = useState(false);
-
-  const cubbleStories = [
+  const [cubbleStories, setCubbleStories] = useState<CubbleStory[]>([
     {
       id: '1',
       userId: 'user1',
@@ -67,7 +86,7 @@ const EnhancedCubblesSection: React.FC = () => {
       culturalTags: ['African', 'Art', 'Textile'],
       preview: '/api/placeholder/80/80'
     }
-  ];
+  ]);
 
   const activeCubbles = [
     {
@@ -116,6 +135,30 @@ const EnhancedCubblesSection: React.FC = () => {
     }
   };
 
+  const handleStoryCreated = (newStory: any) => {
+    // Convert the story creator format to our format
+    const story: CubbleStory = {
+      id: newStory.id,
+      userId: newStory.userId,
+      username: newStory.username,
+      avatar: newStory.avatar,
+      content: {
+        type: newStory.content.type,
+        url: newStory.content.url,
+        thumbnail: newStory.content.thumbnail
+      },
+      caption: newStory.caption,
+      timestamp: newStory.timestamp,
+      expiresAt: newStory.expiresAt,
+      likes: 0,
+      comments: 0,
+      culturalTags: newStory.culturalTags,
+      preview: newStory.content.url
+    };
+    
+    setCubbleStories(prev => [story, ...prev]);
+  };
+
   const getTimeRemaining = (expiresAt: Date) => {
     const now = new Date();
     const diff = expiresAt.getTime() - now.getTime();
@@ -123,6 +166,12 @@ const EnhancedCubblesSection: React.FC = () => {
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     return `${hours}h ${minutes}m`;
   };
+
+  const filteredStories = cubbleStories.filter(story =>
+    story.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    story.caption.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    story.culturalTags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-50 via-blue-50 to-purple-50 p-6">
@@ -137,14 +186,14 @@ const EnhancedCubblesSection: React.FC = () => {
               <h1 className="text-4xl font-bold bg-gradient-to-r from-teal-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
                 Cubbles
               </h1>
-              <p className="text-sm text-gray-500 italic">Culture Bubbles - 12 Hour Stories</p>
+              <p className="text-sm text-gray-500 italic">Culture Bubbles - Share Your Stories</p>
             </div>
           </div>
           
-          <Button className="bg-gradient-to-r from-teal-600 via-blue-600 to-purple-600 hover:from-teal-700 hover:via-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-full shadow-lg">
-            <Plus className="w-5 h-5 mr-2" />
-            Create Cubble Story
-          </Button>
+          <CubbleStoryCreator 
+            onStoryCreated={handleStoryCreated}
+            onClose={() => {}}
+          />
         </div>
 
         {/* Search */}
@@ -152,7 +201,7 @@ const EnhancedCubblesSection: React.FC = () => {
           <div className="relative max-w-md mx-auto">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
             <Input
-              placeholder="Search culture bubbles..."
+              placeholder="Search culture stories..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10 pr-4 py-3 bg-white/80 border-teal-200 focus:border-teal-400 rounded-full"
@@ -164,10 +213,10 @@ const EnhancedCubblesSection: React.FC = () => {
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
             <Clock className="w-6 h-6 text-teal-600" />
-            Active Culture Stories
+            Active Culture Stories ({filteredStories.length})
           </h2>
           <div className="flex gap-4 overflow-x-auto pb-4">
-            {cubbleStories.map((story, index) => (
+            {filteredStories.map((story, index) => (
               <div
                 key={story.id}
                 onClick={() => handleStoryClick(index)}
@@ -207,15 +256,13 @@ const EnhancedCubblesSection: React.FC = () => {
               </div>
             ))}
             
-            {/* Add Story Button */}
-            <div className="flex-shrink-0 cursor-pointer group">
-              <div className="w-20 h-20 rounded-full border-2 border-dashed border-teal-300 flex items-center justify-center group-hover:border-teal-500 transition-colors">
-                <Plus className="w-8 h-8 text-teal-400 group-hover:text-teal-600" />
+            {filteredStories.length === 0 && (
+              <div className="text-center text-gray-500 py-8">
+                <Globe className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+                <p>No stories found</p>
+                <p className="text-sm">Create the first story in this category!</p>
               </div>
-              <p className="text-center text-sm font-medium text-gray-500 mt-2">
-                Add Story
-              </p>
-            </div>
+            )}
           </div>
         </div>
 
@@ -274,7 +321,7 @@ const EnhancedCubblesSection: React.FC = () => {
       {/* Story Viewer */}
       {showStoryViewer && selectedStoryIndex !== null && (
         <CubbleStoryViewer
-          stories={cubbleStories}
+          stories={filteredStories}
           currentIndex={selectedStoryIndex}
           onClose={() => setShowStoryViewer(false)}
           onNext={handleNextStory}
